@@ -47,8 +47,9 @@ Returns:
 
 ```
 └─────/src
-   ├  ├── q1_memory.py
-   ├  └── challenge.ipynb
+   |  ├── q1_memory.py
+   |  ├── challenge.ipynb
+   |  └── *
    ├── *.env*
    ├── requirements.txt
    └── README.md
