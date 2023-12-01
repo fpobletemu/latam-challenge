@@ -44,6 +44,16 @@ Returns:
 1. Para este challenge se utiliza como dataset la información contenida en el [siguiente archivo](https://drive.google.com/file/d/1ig2ngoXFTxP5Pa8muXo02mDTFexZzsis/view?usp=sharing).
 2. El archivo principal utilizado para analizar las estadísticas del código es un jupyter notebook (.ipynb).
 3. Para ejecutar las funciones se deben definir las variables de entorno en un documento .env, usa la siguiente estructura como ejemplo:
+
+```
+└─────/src
+   ├  ├── q1_memory.py
+   ├  └── challenge.ipynb
+   ├── *.env*
+   ├── requirements.txt
+   └── README.md
+```
+
 ```bash
 # Variables de entrega
 postUrl="https://url.com/url-entrega"
