@@ -1,7 +1,7 @@
 from typing import List, Tuple
 from datetime import datetime
-import json
 from collections import Counter, defaultdict
+import json
 from memory_profiler import profile
 
 @profile
@@ -15,7 +15,7 @@ def q1_memory(file_path: str,top_n: int = 10) -> List[Tuple[datetime.date, str]]
         with open(file_path, 'rb') as file:
             #Ejecutar la lectura linea por linea para optimizar la memoria utilizada
             for line in file:
-                tweet = json.loads(line)
+                tweet = json.loads(line.decode('utf-8'))
                 # Tomar solo la parte de la fecha (sin la hora)
                 fecha = tweet['date'][:10]  
                 usuario = tweet['user']['username']            
@@ -39,12 +39,14 @@ def q1_memory(file_path: str,top_n: int = 10) -> List[Tuple[datetime.date, str]]
     except Exception as e:
         print(f"Error al encontrar las fechas con mas tweets: {e}")
    
-    # result = [
-    #     tuple([datetime.strptime(fecha, '%Y-%m-%d').date(), publicaciones_por_usuario_por_fecha[fecha].most_common(1)[0][0]]) 
-    #     for fecha, cantidad in top_fechas
-        # ]
     
     return [
         tuple([datetime.strptime(fecha, '%Y-%m-%d').date(), publicaciones_por_usuario_por_fecha[fecha].most_common(1)[0][0]]) 
         for fecha, _ in top_fechas
         ]
+
+
+# if __name__ == "__main__":
+#     file_path = sys.argv[1]
+#     cProfile.run('result= q1_memory(file_path=file_path)',sort='tottime')
+#     print(result)
