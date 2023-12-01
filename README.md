@@ -50,7 +50,7 @@ Returns:
    |  ├── q1_memory.py
    |  ├── challenge.ipynb
    |  └── *
-   ├── *.env*
+   ├── .env <---- documento con las variables de entorno
    ├── requirements.txt
    └── README.md
 ```
