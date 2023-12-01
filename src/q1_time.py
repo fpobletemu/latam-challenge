@@ -1,51 +1,51 @@
 from typing import List, Tuple
 from datetime import datetime
 import json
-from collections import defaultdict,Counter
-from operator import itemgetter
-from memory_profiler import profile
+from collections import Counter
 
-@profile
+
 def q1_time(file_path: str, top_n: int = 10) -> List[Tuple[datetime.date, str]]:
     
-    # Contador de Tweets por fecha
-    tweets_por_fecha = Counter()
+    # Optimizar en tiempo usando Listas como estructura de datos.
+    fechas = []
+    usuarios = []
+    try:
+        with open(file_path, 'rb') as file:
+            for line in file:
+                tweet = json.loads(line)
+                fecha = tweet['date'][:10] #Solo se captura la parte de la fecha
+                fechas.append(fecha)
 
-    # Diccionario para almacenar el recuento de publicaciones por usuario por fecha
-    publicaciones_por_usuario_por_fecha = defaultdict(lambda: Counter()) # (key: value)
+                usuario = tweet['user']['username'] #nombre de usuario
+                usuarios.append(usuario)
+    # Manejo de errores y excepciones, no se realizan dentro del ciclo for para no perjudicar el tiempo de ejecucion
+    except FileNotFoundError:
+        print(f"Error: El archivo no se encuentra: {file_path}")
+    except Exception as e:
+        print(f"Error desconocido: {e}") 
 
-    archivo_tweets = file_path
-
-    #Lectura bytes 
-    with open(archivo_tweets, 'rb') as file:
-        # Se ejecuta la lectura del archivo de una vez en memoria para que la ejecución sea más rapida
-        for line in file.readlines():
-            tweet = json.loads(line)
-            fecha = tweet['date'][:10] # Tomar solo la parte de la fecha (sin la hora)
-            usuario = tweet['user']['username']
-
-            # Incrementar el recuento de tweets por fecha
-            tweets_por_fecha[fecha] += 1
-
-            # Incrementar el recuento de publicaciones por usuario por fecha
-            publicaciones_por_usuario_por_fecha[fecha][usuario] += 1
+    # Optimizar tiempo utilizando Counter() para los conteos.
+    counter_fechas = Counter(fechas)
 
     # Encontrar las 10 fechas con más tweets, ordeno por el valor de la llave (conteo de tweets)
-    # top_fechas = sorted(tweets_por_fecha.items(), key=lambda x: x[1], reverse=True)[:10]
-    top_fechas = tweets_por_fecha.most_common(top_n)
-    
-    
-    result = [tuple([datetime.strptime(fecha, '%Y-%m-%d').date(),publicaciones_por_usuario_por_fecha[fecha].most_common(1)[0][0]]) for fecha,cantidad in top_fechas]
 
+    try:
+        top_fechas = [dia for dia, _ in counter_fechas.most_common(top_n)]
+    except Exception as e:
+        print(f"Error al buscar top de fechas: {e}") 
+    
+        
+    resultado = []
+    for dia in top_fechas:
+        # Encontrar los indices de los registros que corresponden al dia actual
+        indices_dia = [i for i,fecha in enumerate(fechas) if fecha == dia]
 
-    # result = [tuple([datetime.strptime(fecha, '%Y-%m-%d').date(),max(publicaciones_por_usuario_por_fecha[fecha].items(), key=itemgetter(1))[0]]) for fecha,cantidad in top_fechas]
-    # Imprimir las 10 fechas con más tweets y el usuario con más publicaciones en cada fecha
-    # for fecha,cantidad in top_fechas:
-    #     usuario_mas_publicaciones = max(publicaciones_por_usuario_por_fecha[fecha].items(), key=itemgetter(1))[0]
-    #     #Se convierte la fecha de str a datetime
-    #     dt_fecha = datetime.strptime(fecha, '%Y-%m-%d').date()
-    #     result.append(tuple([dt_fecha,usuario_mas_publicaciones]))
+        # Contar la frecuencia de usuarios en el dia actual (cantidad de tweets por usuario)
+        tweets_por_usuario = Counter(usuarios[i] for i in indices_dia)
+
+        usuario_con_mas_tweets, tweets_usuario = tweets_por_usuario.most_common(1)[0]
+        resultado.append(tuple([datetime.strptime(dia, '%Y-%m-%d').date(),usuario_con_mas_tweets]))
 
 
     #Retornar el resultado asegurando que sea una lista
-    return list(result)
+    return list(resultado)
