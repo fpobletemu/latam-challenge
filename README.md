@@ -43,9 +43,15 @@ Returns:
 ## Instrucciones
 1. Para este challenge se utiliza como dataset la información contenida en el [siguiente archivo](https://drive.google.com/file/d/1ig2ngoXFTxP5Pa8muXo02mDTFexZzsis/view?usp=sharing).
 2. El archivo principal utilizado para analizar las estadísticas del código es un jupyter notebook (.ipynb).
-3. Para ejecutar las funciones se debe indicar la ruta del archivo descargado en la variable 'archivo_tweets' dentro del jupyter notebook. Para rutas de Windows utilizar `r""` para lidiar con el caracter `\`, un ejemplo sería:
-```python
-   archivo_tweets = r"C:\ruta\al\archivo\farmers-protest-tweets-2021-2-4.json"
+3. Para ejecutar las funciones se deben definir las variables de entorno en un documento .env, usa la siguiente estructura como ejemplo:
+```bash
+# Variables de entrega
+postUrl="https://url.com/url-entrega"
+autorName="Fernando Poblete"
+autorEmail="f.pobletemu@gmail.com"
+repoUrl="https://github.com/fpobletemu/latam-challenge.git"
+#Variables para codigo
+dataFilePath=C:\Users\fipob\Desktop\challenge_DE\src\farmers-protest-tweets-2021-2-4.json
 ```
 
 4. Para ejecutar correctamente todas las funciones se debe levantar un entorno virtual `python -m venv challenge_env`.
@@ -55,7 +61,7 @@ Returns:
 
 
 ## Supuestos
-1. El encoding por defecto será `utf-8
+1. El encoding por defecto será `utf-8`
 2. Para el tercer enunciado se entiende que las menciones corresponden al campo `'quoteCount'`
 3. Se consideran solo los tweets principales, es decir, no se cuentan los tweets que está dentro de otro tweet (quotedTweet)
 
